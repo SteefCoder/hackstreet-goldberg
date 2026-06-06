@@ -1,1 +1,71 @@
-<h1>Hello World!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ text }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --text: #f0ebe0;
+      --accent: #c8a96e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .scene {
+      text-align: center;
+      opacity: 0;
+      animation: rise 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: 0.3s;
+    }
+
+    .label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: 0.12em;
+      line-height: 1;
+    }
+
+    .label span {
+      color: var(--accent);
+    }
+
+    .rule {
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      margin: 1.8rem auto 0;
+      animation: expand 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: 1s;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes expand {
+      from { width: 0; }
+      to   { width: 6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <h1 class="label">{{ text }}</h1>
+  </div>
+</body>
+</html>
