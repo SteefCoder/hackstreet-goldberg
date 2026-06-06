@@ -1,0 +1,20 @@
+[
+  {
+    "uuid": "49e96464-aa17-46b3-b5c6-87574b6b48b4",
+    "name": "Bot",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  },
+  {
+    "uuid": "ae1a5aa0-6769-4f08-bce4-40c3e4aabccd",
+    "name": "kleinbroodje",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  },
+  {
+    "uuid": "2d840e3a-9bad-43df-973e-a59c52bd2e2a",
+    "name": "Steef07",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  }
+]

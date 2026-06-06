@@ -1,0 +1,17 @@
+{
+  "stats": {
+    "minecraft:custom": {
+      "minecraft:time_since_rest": 36865,
+      "minecraft:total_world_time": 36865,
+      "minecraft:leave_game": 1,
+      "minecraft:play_time": 36865,
+      "minecraft:time_since_death": 36865
+    },
+    "minecraft:picked_up": {
+      "minecraft:dirt": 2219,
+      "minecraft:white_concrete": 143,
+      "minecraft:black_concrete": 169
+    }
+  },
+  "DataVersion": 4671
+}
