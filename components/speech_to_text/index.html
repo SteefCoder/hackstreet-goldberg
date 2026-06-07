@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hackstreet Goldberg</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --acid: #c8ff00;
+      --blood: #ff2200;
+      --ink: #0a0a0a;
+      --paper: #f0ece0;
+      --glitch1: #ff00cc;
+      --glitch2: #00ffee;
+    }
+
+    body {
+      background-color: var(--ink);
+      color: var(--paper);
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: crosshair;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header-wrap {
+      position: relative;
+      margin-bottom: 3rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 6.5rem);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--paper);
+      position: relative;
+      display: inline-block;
+    }
+
+    h1::before {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      color: var(--glitch1);
+      clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
+      animation: glitch-top 3.5s infinite;
+      transform: translateX(-3px);
+    }
+
+    h1::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      color: var(--glitch2);
+      clip-path: polygon(0 55%, 100% 55%, 100% 75%, 0 75%);
+      animation: glitch-bot 3.5s infinite 0.15s;
+      transform: translateX(3px);
+    }
+
+    @keyframes glitch-top {
+
+      0%,
+      92%,
+      100% {
+        transform: translateX(-3px);
+        opacity: 1;
+      }
+
+      93% {
+        transform: translateX(6px) skewX(-5deg);
+        opacity: 0.8;
+      }
+
+      94% {
+        transform: translateX(-6px);
+        opacity: 0.6;
+      }
+
+      95% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes glitch-bot {
+
+      0%,
+      92%,
+      100% {
+        transform: translateX(3px);
+        opacity: 1;
+      }
+
+      93% {
+        transform: translateX(-8px) skewX(3deg);
+        opacity: 0.7;
+      }
+
+      94% {
+        transform: translateX(5px);
+        opacity: 0.5;
+      }
+
+      95% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .deco-line {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--acid) 50%, transparent 100%);
+      margin: 1.5rem 0;
+    }
+
+    .panels {
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    .panel {
+      position: relative;
+      padding: 2rem;
+      border: 1px solid #2a2a2a;
+      background: #0d0d0d;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 2px;
+      background: var(--acid);
+    }
+
+    #text {
+      font-size: 3rem;
+      line-height: 1.7;
+      color: var(--paper);
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      word-break: break-word;
+      max-width: 90%;
+    }
+
+    .btn-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    #rec-button {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: transparent;
+      color: var(--acid);
+      border: 2px solid var(--acid);
+      padding: 0.75rem 2rem;
+      cursor: crosshair;
+      position: relative;
+      transition: color 0.15s, background 0.15s;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    }
+
+    #rec-button::before {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border: 1px solid var(--acid);
+      opacity: 0.3;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+
+    #rec-button:hover:not(:disabled) {
+      background: var(--acid);
+      color: var(--ink);
+    }
+
+    #rec-button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    #rec-button.recording {
+      border-color: var(--blood);
+      color: var(--blood);
+      animation: pulse-border 1s ease-in-out infinite;
+    }
+
+    #rec-button.recording::before {
+      border-color: var(--blood);
+    }
+
+    #rec-button.recording:hover:not(:disabled) {
+      background: var(--blood);
+      color: var(--paper);
+    }
+
+    @keyframes pulse-border {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 34, 0, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 8px rgba(255, 34, 0, 0);
+      }
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #333;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+
+    .status-dot.active {
+      background: var(--blood);
+      animation: blink 0.8s step-start infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .status-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #555;
+      font-style: italic;
+    }
+
+    .status-label.active {
+      color: var(--blood);
+    }
+
+    .deco-grid {
+      position: fixed;
+      right: -60px;
+      top: 10%;
+      width: 180px;
+      height: 400px;
+      background-image: linear-gradient(var(--acid) 1px, transparent 1px), linear-gradient(90deg, var(--acid) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.04;
+      pointer-events: none;
+      transform: rotate(12deg);
+    }
+
+    .deco-circle {
+      position: fixed;
+      left: -80px;
+      bottom: 15%;
+      width: 220px;
+      height: 220px;
+      border: 1px solid var(--glitch1);
+      border-radius: 50%;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+
+    .deco-circle::after {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border: 1px solid var(--glitch1);
+      border-radius: 50%;
+      opacity: 0.5;
+    }
+
+    .wave {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 28px;
+    }
+
+    .wave-bar {
+      width: 3px;
+      background: var(--acid);
+      border-radius: 1px;
+      height: 4px;
+    }
+
+    .wave.active .wave-bar:nth-child(1) {
+      animation: wave-anim 0.6s ease-in-out infinite;
+    }
+
+    .wave.active .wave-bar:nth-child(2) {
+      animation: wave-anim 0.6s ease-in-out infinite 0.10s;
+    }
+
+    .wave.active .wave-bar:nth-child(3) {
+      animation: wave-anim 0.6s ease-in-out infinite 0.20s;
+    }
+
+    .wave.active .wave-bar:nth-child(4) {
+      animation: wave-anim 0.6s ease-in-out infinite 0.05s;
+    }
+
+    .wave.active .wave-bar:nth-child(5) {
+      animation: wave-anim 0.6s ease-in-out infinite 0.15s;
+    }
+
+    .wave.active .wave-bar:nth-child(6) {
+      animation: wave-anim 0.6s ease-in-out infinite 0.25s;
+    }
+
+    .wave.active .wave-bar:nth-child(7) {
+      animation: wave-anim 0.6s ease-in-out infinite 0.08s;
+    }
+
+    @keyframes wave-anim {
+
+      0%,
+      100% {
+        height: 4px;
+      }
+
+      50% {
+        height: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="deco-grid"></div>
+  <div class="deco-circle"></div>
+
+  <div class="container">
+    <div class="header-wrap">
+      <h1 data-text="HACKSTREET GOLDBERG">HACKSTREET GOLDBERG</h1>
+      <div class="deco-line"></div>
+    </div>
+
+    <div class="panels">
+      <div class="panel">
+        <div id="text"></div>
+      </div>
+    </div>
+
+    <div class="btn-wrap">
+      <button id="rec-button">⬡ Record</button>
+      <div class="status-dot" id="dot"></div>
+      <span class="status-label" id="status-label">idle</span>
+      <div class="wave" id="wave">
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    const dot = document.getElementById('dot');
+    const label = document.getElementById('status-label');
+    const wave = document.getElementById('wave');
+    const btn = document.getElementById('rec-button');
+
+    function setRecordingUI(active) {
+      dot.classList.toggle('active', active);
+      label.textContent = active ? 'recording' : 'idle';
+      label.classList.toggle('active', active);
+      wave.classList.toggle('active', active);
+      btn.classList.toggle('recording', active);
+    }
+
+    document.addEventListener('hackstreet:recording', e => setRecordingUI(e.detail.active));
+  </script>
+</body>
+
+</html>
