@@ -18,12 +18,21 @@ import cv2
 import numpy as np
 
 
+if sys.platform == 'darwin':
+    CMD = Keys.COMMAND
+else:
+    CMD = Keys.CONTROL
+
+
 colorama.init(autoreset=True)
 
 
 class Browser:
     def __init__(self):
-        profiles_dir = os.path.expanduser("~/Library/Application Support/Firefox/Profiles/")
+        if sys.platform == 'darwin':
+            profiles_dir = os.path.expanduser("~/Library/Application Support/Firefox/Profiles/")
+        else:
+            profiles_dir = os.path.expanduser("~/.mozilla/firefox/")
         profiles = glob.glob(os.path.join(profiles_dir, "*.default-release"))
         if not profiles:
             profiles = glob.glob(os.path.join(profiles_dir, "*.default"))
@@ -82,7 +91,8 @@ class Sender:
         body_input.click()
         if msg is None:
             # message is None -> we're sending from clipboard
-            ActionChains(self.browser.driver).key_down(Keys.COMMAND).send_keys("v").key_up(Keys.COMMAND).perform()
+
+            ActionChains(self.browser.driver).key_down(CMD).send_keys("v").key_up(CMD).perform()
             body_input.click()  # just in case?
         else:
             # we're sending plain text
@@ -90,7 +100,7 @@ class Sender:
 
         # press enter to send message instead of locating the message button
         time.sleep(4)
-        ActionChains(self.browser.driver).key_down(Keys.COMMAND).send_keys(Keys.RETURN).key_up(Keys.COMMAND).perform()
+        ActionChains(self.browser.driver).key_down(CMD).send_keys(Keys.RETURN).key_up(CMD).perform()
 
         # proprietary sleep
         time.sleep(20)

@@ -7,6 +7,7 @@ import pathlib
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from components.mail.mail import Sender, Browser
+from components.desmos.decoder import DesmosDecoder
 
 def generate_qr(text):
     qr = qrcode.QRCode(border=0)
@@ -19,9 +20,8 @@ def generate_qr(text):
         json.dump(matrix, f)
 
 
-#name = open("received.txt").read().strip()
-name = sys.argv[1]
-generate_qr("http://172.16.0.47?text=" + name)
+d = DesmosDecoder(lambda name: generate_qr("http://172.16.0.47?text=" + name))
+d.decode(None)
 # generate_qr("abc")
 os.system('wmctrl -a "Minecraft* 1.21.11"')
 pg.sleep(1)
@@ -63,4 +63,4 @@ os.system("scrot -e 'xclip -selection clipboard -t image/png -i $f'")
 time.sleep(0.1)
 
 s = Sender(Browser())
-s.send("lianbitterbal@gmail.com", None)
+s.send("richardkevinson279@gmail.com", None)
