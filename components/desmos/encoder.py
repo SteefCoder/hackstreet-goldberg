@@ -51,8 +51,12 @@ class DesmosEncoder:
         time.sleep(0.5)
         slower_button = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "dcg-action-slower")))
         time.sleep(0.5)
-        for _ in range(5):
+        for _ in range(7):
             slower_button.click()
+
+        # play once button
+        play_once = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'div[aria-label="Play once"')))
+        play_once.click()    
 
         # mute button
         mute_button = WebDriverWait(self.driver, 10).until(
