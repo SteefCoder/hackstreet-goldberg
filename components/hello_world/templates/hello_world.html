@@ -1,71 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ text }}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #0d0d0d;
-      --text: #f0ebe0;
-      --accent: #c8a96e;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background: var(--bg);
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .scene {
-      text-align: center;
-      opacity: 0;
-      animation: rise 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      animation-delay: 0.3s;
-    }
-
-    .label {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(4rem, 12vw, 9rem);
-      font-weight: 300;
-      color: var(--text);
-      letter-spacing: 0.12em;
-      line-height: 1;
-    }
-
-    .label span {
-      color: var(--accent);
-    }
-
-    .rule {
-      width: 0;
-      height: 1px;
-      background: var(--accent);
-      margin: 1.8rem auto 0;
-      animation: expand 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      animation-delay: 1s;
-    }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes expand {
-      from { width: 0; }
-      to   { width: 6rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ text }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0d;
+  --text: #f0ebe0;
+  --accent: #c8a96e;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.scene {
+  text-align: center;
+  opacity: 0;
+  animation: rise 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.3s;
+}
+.label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 12vw, 9rem);
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+.label span {
+  color: var(--accent);
+}
+.cursor {
+  display: inline-block;
+  width: 3px;
+  height: 0.85em;
+  background: var(--accent);
+  margin-left: 0.08em;
+  vertical-align: middle;
+  animation: blink 0.75s step-end infinite;
+  border-radius: 1px;
+}
+.cursor.done {
+  animation: none;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.3s;
+}
+.rule {
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  margin: 1.8rem auto 0;
+  animation: expand 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 1s;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes expand {
+  from { width: 0; }
+  to   { width: 6rem; }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+</style>
 </head>
 <body>
-  <div class="scene">
-    <h1 class="label">{{ text }}</h1>
-  </div>
+<div class="scene">
+  <h1 class="label">
+    <span id="typed"></span><span class="cursor" id="cursor"></span>
+  </h1>
+  <!-- <div class="rule"></div> -->
+</div>
+
+<script>
+  const fullText = "{{ text }}";
+  const typedEl = document.getElementById("typed");
+  const cursor  = document.getElementById("cursor");
+
+  // Wait for the scene fade-in to finish before typing
+  const typeDelay   = 1300; // ms — matches animation-delay (0.3s) + duration (1.4s) roughly
+  const charDelay   = 160;   // ms per character
+
+  let index = 0;
+
+  function typeNext() {
+    if (index < fullText.length) {
+      typedEl.textContent += fullText[index++];
+      setTimeout(typeNext, charDelay);
+    } else {
+      // Typing done — fade out cursor
+      cursor.classList.add("done");
+    }
+  }
+
+  setTimeout(typeNext, typeDelay);
+</script>
 </body>
 </html>
