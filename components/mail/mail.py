@@ -12,6 +12,10 @@ import random
 import sys
 import os
 import glob
+import pyautogui as pag
+from PIL import ImageGrab
+import cv2
+import numpy as np
 
 
 colorama.init(autoreset=True)
@@ -24,7 +28,7 @@ class Browser:
         if not profiles:
             profiles = glob.glob(os.path.join(profiles_dir, "*.default"))
         if not profiles:
-            print("❌ No Firefox profile found.")
+            print(Fore.RED + "No Firefox profile found.")
             sys.exit(1)
 
         options = Options()
@@ -76,14 +80,20 @@ class Sender:
         # input the message
         body_input = self.browser.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "div[aria-label='Message Body']")))
         body_input.click()
-        self._send_keys_delay(body_input, msg)
+        if msg is None:
+            # message is None -> we're sending from clipboard
+            ActionChains(self.browser.driver).key_down(Keys.COMMAND).send_keys("v").key_up(Keys.COMMAND).perform()
+            body_input.click()  # just in case?
+        else:
+            # we're sending plain text
+            self._send_keys_delay(body_input, msg)
 
         # press enter to send message instead of locating the message button
-        ActionChains(self.browser.driver).key_down(Keys.CONTROL).send_keys(Keys.RETURN).key_up(Keys.CONTROL).perform()
+        time.sleep(4)
         ActionChains(self.browser.driver).key_down(Keys.COMMAND).send_keys(Keys.RETURN).key_up(Keys.COMMAND).perform()
 
         # proprietary sleep
-        time.sleep(5)
+        time.sleep(20)
 
 
 class Receiver:
@@ -98,7 +108,7 @@ class Receiver:
         except Exception:
             return 0
     
-    def receive(self, callback):
+    def receive(self, callback, image=False, immediate=False):
         self.browser.driver.get("https://mail.google.com/mail/u/0/#inbox")
 
         mails = self._get_mails()
@@ -108,20 +118,41 @@ class Receiver:
             time.sleep(5)
 
             mails = self._get_mails()
-            if len(mails) > num_mails:
+            if len(mails) > num_mails or immediate:
                 # a new mail has entered the chat!
                 last_mail = mails[0]
                 mail_link = last_mail.find_element(By.CSS_SELECTOR, 'div[role="link"]')
                 mail_link.click()
 
-                divs = self.browser.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div[dir='ltr']")))
-                for i, div in enumerate(divs):
-                    # find the one that actually has text
-                    if stripped := div.text.strip():
-                        callback(stripped)
-                        break
+                if image:
+                    # receiving an image
+                    attach = self.browser.wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "CToWUd")))[0]
+                    # right click + save the image
+                    ActionChains(self.browser.driver).context_click(attach).perform()
+                    time.sleep(2)
+                    pag.press("v")
+                    time.sleep(2)
+                    pag.press("enter")
+                    time.sleep(1)
+                    pag.press("enter")
+                    time.sleep(1)
+                    pag.press("enter")
+
+                    pil_img = ImageGrab.grabclipboard()
+                    cv2_img = cv2.cvtColor(np.array(pil_img), cv2.COLOR_RGB2BGR)
+                    detector = cv2.QRCodeDetector()
+                    text, points, _ = detector.detectAndDecode(cv2_img)
+                    print("QR content:", text)
+                else:
+                    # receiving text, so find the correct "div"
+                    divs = self.browser.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div[dir='ltr']")))
+                    for i, div in enumerate(divs):
+                        # find the one that actually has text
+                        if stripped := div.text.strip():
+                            callback(stripped)
+                            break
                 break
         
             print(Fore.BLUE + f"No new mails. Current count: {num_mails}")
 
-        time.sleep(6000)
+        time.sleep(10000)
