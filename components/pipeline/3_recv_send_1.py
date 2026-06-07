@@ -7,8 +7,7 @@ import time
 import pyautogui as pg
 import pathlib
 
-from components.mail.mail import Browser, Receiver
-from components.desmos.encoder import DesmosEncoder
+from components.mail.mail import Browser, Sender
 from components.desmos.decoder import DesmosDecoder
 
 
@@ -24,16 +23,22 @@ def start_minecraft():
             json.dump(matrix, f)
 
 
-    generate_qr("http://172.16.0.47?text=" + "Hello, World")
+    d = DesmosDecoder(lambda name: generate_qr("http://172.16.0.47?text=" + name))
+    d.decode(None)
     # generate_qr("abc")
     os.system('wmctrl -a "Minecraft* 1.21.11"')
-    time.sleep(0.3)
-    pg.mouseDown(447, 239)
+    pg.sleep(1)
+    pg.click(950, 600)
+    pg.sleep(1)
+    pg.click(447, 239)
 
-    time.sleep(3)
+    pg.sleep(3)
 
+    # pg.hotkey("f1")
+    # pg.sleep(0.2)
     pg.typewrite("t")
-    time.sleep(0.2)
+    pg.sleep(0.2)
+    pg.hotkey("backspace")
     pg.typewrite("/player bob spawn")
     pg.hotkey("enter")
 
@@ -41,26 +46,26 @@ def start_minecraft():
     #pg.typewrite("/fill 20 -61 81 50 -61 121 minecraft:grass_block")
     #pg.hotkey("enter")
 
-    time.sleep(1)
+    pg.sleep(1)
 
     pg.typewrite("t")
-    time.sleep(1)
+    pg.sleep(0.5)
+    pg.hotkey("backspace")
     pg.typewrite("/script in qrcode invoke create_qr")
     pg.hotkey("enter")
-
-
-    pg.hotkey("f1")
 
     p = pathlib.Path("components/mcserver/world/scripts/shared/baz.txt")
     while not p.exists():
         time.sleep(0.3)
 
-    p.unlink()
+    os.system("rm components/mcserver/world/scripts/shared/baz.txt")
+    time.sleep(0.2)
+    os.system("scrot -e 'xclip -selection clipboard -t image/png -i $f'")
 
-    im = pg.screenshot()
-    im.save('components/launch-minecraft/im.png')
+    time.sleep(0.1)
 
-    pg.hotkey("alt", "tab")
+    s = Sender(Browser())
+    s.send("richardkevinson279@gmail.com", None)
 
 
 DesmosDecoder(start_minecraft).decode()
