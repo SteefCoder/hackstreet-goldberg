@@ -1,61 +1,90 @@
-create_qr() -> (
-    run('player bob spawn');
-    sleep(100, print('Interrupted'));
-    run('fill 20 -61 81 50 -61 121 minecraft:grass_block');
-    qr = [
-        [1,1,1,1,1,1,1,0,1,1,1,1,0,0,1,0,1,0,1,1,1,1,1,1,1],
-        [1,0,0,0,0,0,1,0,0,0,1,1,0,1,1,0,0,0,1,0,0,0,0,0,1],
-        [1,0,1,1,1,0,1,0,1,1,0,0,1,1,1,1,0,0,1,0,1,1,1,0,1],
-        [1,0,1,1,1,0,1,0,0,1,1,0,0,1,1,0,1,0,1,0,1,1,1,0,1],
-        [1,0,1,1,1,0,1,0,0,0,1,0,1,0,1,0,0,0,1,0,1,1,1,0,1],
-        [1,0,0,0,0,0,1,0,1,1,1,1,1,1,1,0,0,0,1,0,0,0,0,0,1],
-        [1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,1,1,1,1],
-        [0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,1,0,0,0,0,0,0,0,0],
-        [1,0,1,0,0,0,1,1,0,1,1,0,1,0,0,1,1,0,0,1,0,0,1,0,1],
-        [1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,1,1,0,1,1,0,1,0,1,1],
-        [1,1,0,0,1,1,1,0,1,1,0,1,1,1,0,1,0,1,0,0,1,1,1,0,1],
-        [1,1,1,1,0,0,0,0,1,0,1,0,1,0,1,0,0,1,0,1,1,1,0,0,0],
-        [0,1,0,1,0,0,1,1,0,1,0,1,1,0,0,1,1,0,1,1,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,1,1,0,0,1,0,1,1,1,0,1,1,0,0,0,1,1],
-        [1,1,0,1,1,1,1,1,0,0,1,0,1,1,0,1,1,0,0,0,0,1,1,0,1],
-        [0,0,1,0,1,0,0,0,1,1,0,1,1,0,0,1,0,0,1,1,1,1,0,0,0],
-        [1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,0],
-        [0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,1,1,0,0,0,1,0,0,0,1],
-        [1,1,1,1,1,1,1,0,1,1,1,1,0,0,0,0,1,0,1,0,1,0,0,0,1],
-        [1,0,0,0,0,0,1,0,0,1,0,0,0,1,0,1,1,0,0,0,1,0,0,1,0],
-        [1,0,1,1,1,0,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,0,0,0,1],
-        [1,0,1,1,1,0,1,0,0,1,0,0,1,0,0,1,1,1,0,0,1,0,1,1,0],
-        [1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,1,1,1,0,1,1,1,0,1,1],
-        [1,0,0,0,0,0,1,0,0,0,1,1,1,0,1,0,1,1,0,1,1,0,0,0,0],
-        [1,1,1,1,1,1,1,0,1,1,1,0,0,1,1,0,1,0,1,0,0,1,0,0,1]
-    ];
+step(qr, i, j, s) -> (
 
     n = length(qr);
     m = length(qr:0);
 
-    bot = player('bob');
-    inventory_set(bot, 0, 1, 'minecraft:white_concrete');
-    inventory_set(bot, 1, 1, 'minecraft:black_concrete');
-
-    loop(n,
-        i = _;
-        loop (m,
-            j = _;
-            modify(bot, 'pos', 20 + i, -60, 80 + j);
-            modify(bot, 'look', 20 + i, -61, 80 + j + 1);
-            modify(bot, 'selected_slot', qr:i:j);
-
-            item = if(qr:i:j, 'minecraft:black_concrete', 'minecraft:white_concrete');
-            destroy(20 + i, -61, 80 + j + 1);
-            place_item(item, 20 + i, -61, 81 + j);
-            
-            sleep(5, print('Interrupted'));
-        );
+    if(i >= n,
+        write_file('baz', 'shared_text', 'A');
+        // print('writing to baz...');
+        run('player bob kill');
+        return()
     );
 
-    run('player bob kill')
+    bot = player('bob');
+
+    // snake direction per row
+    dir = if(i % 2 == 0, 1, -1);
+
+    // bot position follows snake pattern
+    x = 20 + i;
+    z = 80 + j;
+
+    modify(bot, 'pos', x, -60, z);
+    modify(bot, 'look', x, -61, z + dir);
+
+    item = if(qr:i:j,
+        'minecraft:black_concrete',
+        'minecraft:white_concrete'
+    );
+
+    destroy(x, -61, z + 1);
+    place_item(item, x, -61, z + 1);
+
+    // move horizontally in snake pattern
+    j += dir;
+
+    // boundary handling
+    if(j >= m,
+        i += 1;
+        j = m - 1
+    );
+
+    if(j < 0,
+        i += 1;
+        j = 0
+    );
+
+    if (s,
+        step(qr, i, j, false);
+        // schedule(1, 'step', qr, i, j, false);
+        dir = if(i % 2 == 0, 1, -1);
+        j += dir;
+
+        // boundary handling
+        if(j >= m,
+            i += 1;
+            j = m - 1
+        );
+
+        if(j < 0,
+            i += 1;
+            j = 0
+        );
+        step(qr, i, j, false);
+        // schedule(1, 'step', qr, i, j, false);
+        dir = if(i % 2 == 0, 1, -1);
+        j += dir;
+
+        // boundary handling
+        if(j >= m,
+            i += 1;
+            j = m - 1
+        );
+
+        if(j < 0,
+            i += 1;
+            j = 0
+        );
+        schedule(0, 'step', qr, i, j, true);
+    );
 );
 
-qr_task() -> (
-  task_thread('temp', 'create_qr');
-)
+
+create_qr() -> (
+    qr = read_file('qr', 'shared_json');
+    // run('fill 20 -61 81 50 -61 121 minecraft:grass_block');
+    
+    step(qr, 0, 0, true);
+
+);
+

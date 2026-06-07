@@ -218,4 +218,5 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Server
-mcserver/world/
+/components/mcserver/world/
+/components/mcserver/logs/
