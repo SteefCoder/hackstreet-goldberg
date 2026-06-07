@@ -57,7 +57,7 @@ class DesmosDecoder:
                 break_outer = False
 
                 # Only print if loud enough (not silence)
-                if amplitude > 5000:
+                if amplitude > 500_000:
                     # convert frequency to the fucking chars
                     for char, range in char_to_freq_range.items():
                         if range[0] <= freq <= range[1]:
@@ -67,7 +67,7 @@ class DesmosDecoder:
                                 last_detected = char
                                 count = 1
 
-                            if count < 5:
+                            if count < 4:
                                 continue
                                 
                             if char == "@":
