@@ -7,8 +7,8 @@ def callback(received):
 
 
 with Browser() as gmail:
-    # sender = Sender(gmail, typing_delay=0)
-    # sender.send(recv="richardkevinson279@gmail.com", msg=None)
+    sender = Sender(gmail, typing_delay=0)
+    sender.send(recv="richardkevinson279@gmail.com", msg="asd")
     # sender.send(recv="lianbitterbal@gmail.com", msg=None)
-    receiver = Receiver(gmail)
-    receiver.receive(callback, image=True, immediate=True)
+    # receiver = Receiver(gmail)
+    # receiver.receive(callback, image=True, immediate=True)
