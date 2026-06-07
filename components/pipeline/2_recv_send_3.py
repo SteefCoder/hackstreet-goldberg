@@ -24,4 +24,4 @@ def start_encoding(message):
 
 with Browser() as firefox:
     recv = Receiver(firefox)
-    recv.receive(start_encoding, image=False, immediate=True)
+    recv.receive(start_encoding, image=False, immediate=False)

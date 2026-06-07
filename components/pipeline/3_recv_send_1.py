@@ -11,7 +11,7 @@ from components.mail.mail import Browser, Sender
 from components.desmos.decoder import DesmosDecoder
 
 
-def start_minecraft():
+def start_minecraft(msg):
     def generate_qr(text):
         qr = qrcode.QRCode(border=0)
         qr.add_data(text)
@@ -22,9 +22,8 @@ def start_minecraft():
         with open("components/mcserver/world/scripts/shared/qr.json", "w") as f:
             json.dump(matrix, f)
 
+    generate_qr(msg)
 
-    d = DesmosDecoder(lambda name: generate_qr("http://172.16.0.47?text=" + name))
-    d.decode(None)
     # generate_qr("abc")
     os.system('wmctrl -a "Minecraft* 1.21.11"')
     pg.sleep(1)
@@ -68,4 +67,4 @@ def start_minecraft():
     s.send("richardkevinson279@gmail.com", None)
 
 
-DesmosDecoder(start_minecraft).decode()
+DesmosDecoder().decode(start_minecraft)

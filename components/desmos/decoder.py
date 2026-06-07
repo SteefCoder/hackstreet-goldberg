@@ -4,8 +4,7 @@ from .commons import *
 
 
 class DesmosDecoder:
-    def __init__(self, callback):
-        self.callback = callback
+    def __init__(self):
         self.CHUNK = 4096       # samples per frame
         self.RATE = 44100       # sample self.RATE (Hz)
 
@@ -94,7 +93,7 @@ class DesmosDecoder:
                 if break_outer:
                     print("broken outer")
                     print(f"final message: {char_stream}")
-                    self.callback(char_stream)
+                    callback(char_stream)
                     break
 
         except KeyboardInterrupt:
