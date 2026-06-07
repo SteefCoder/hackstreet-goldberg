@@ -1,7 +1,7 @@
 import pyaudio
 import numpy as np
 from .commons import *
-import os
+
 
 class DesmosDecoder:
     def __init__(self, callback):
@@ -32,8 +32,6 @@ class DesmosDecoder:
         return peak_freq, amplitude
     
     def decode(self, callback):
-        self.callback("asb")
-        return
         p = pyaudio.PyAudio()
         stream = p.open(
             format=pyaudio.paInt16,
