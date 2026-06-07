@@ -9,7 +9,7 @@ keep_waiting = True
 def on_press(key):
     global keep_waiting
     try:
-        if key.char == 'p':  # or whatever key you want
+        if key.char == 'r':  # or whatever key you want
             keep_waiting = False
             return False  # stops listener
     except AttributeError:
@@ -33,5 +33,5 @@ path = cv2.imread(outfile)
 assert path is not None
 text = cv2.QRCodeDetector().detectAndDecode(path)[0]
 
-print(text)
+print("Text:", text)
 subprocess.Popen(['xdg-open', text.strip()])

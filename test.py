@@ -1,14 +1,19 @@
-from components.mail.mail import Browser, Sender, Receiver
-from colorama import Fore
+from PIL import ImageGrab, Image
+import cv2
+import numpy as np
+from qreader import QReader
 
 
-def callback(received):
-    print(Fore.GREEN + received + Fore.RESET)
+
+def detect():
+    image_path = "pil_img.png"
+
+    qreader = QReader()
+    image = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)
+
+    decoded_texts = qreader.detect_and_decode(image=image)
+
+    print("text: ", decoded_texts)
 
 
-with Browser() as gmail:
-    sender = Sender(gmail, typing_delay=0)
-    sender.send(recv="richardkevinson279@gmail.com", msg="asd")
-    # sender.send(recv="lianbitterbal@gmail.com", msg=None)
-    # receiver = Receiver(gmail)
-    # receiver.receive(callback, image=True, immediate=True)
+detect()

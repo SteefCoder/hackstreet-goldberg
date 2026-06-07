@@ -10,8 +10,14 @@ import pathlib
 from components.mail.mail import Browser, Sender
 from components.desmos.decoder import DesmosDecoder
 
+from pyfiglet import Figlet
+from rich.console import Console
+from rich.live import Live
+from rich.align import Align
 
-def start_minecraft():
+
+def start_minecraft(msg):
+def start_minecraft(msg):
     def generate_qr(text):
         qr = qrcode.QRCode(border=0)
         qr.add_data(text)
@@ -22,14 +28,18 @@ def start_minecraft():
         with open("components/mcserver/world/scripts/shared/qr.json", "w") as f:
             json.dump(matrix, f)
 
+    generate_qr(msg)
 
-    d = DesmosDecoder(lambda name: generate_qr("http://172.16.0.47?text=" + name))
-    d.decode(None)
+    generate_qr(msg)
     # generate_qr("abc")
     os.system('wmctrl -a "Minecraft* 1.21.11"')
     pg.sleep(1)
+    pg.moveTo(950, 600)
+    pg.sleep(0.3)
     pg.click(950, 600)
     pg.sleep(1)
+    pg.moveTo(447, 239)
+    pg.sleep(0.3)
     pg.click(447, 239)
 
     pg.sleep(3)
@@ -59,7 +69,7 @@ def start_minecraft():
         time.sleep(0.3)
 
     os.system("rm components/mcserver/world/scripts/shared/baz.txt")
-    time.sleep(0.2)
+    # time.sleep(0.2)
     os.system("scrot -e 'xclip -selection clipboard -t image/png -i $f'")
 
     time.sleep(0.1)
@@ -68,4 +78,25 @@ def start_minecraft():
     s.send("richardkevinson279@gmail.com", None)
 
 
-DesmosDecoder(start_minecraft).decode()
+def caesar(text, shift):
+    result = ""
+    for char in text:
+        if char.isalpha():
+            base = ord('A') if char.isupper() else ord('a')
+            result += chr((ord(char) - base + shift) % 26 + base)
+        else:
+            result += char
+    return result
+
+
+console = Console()
+figlet = Figlet(font="big")
+
+with Live(refresh_per_second=10, screen=True) as live:
+
+    def callback(text):
+        t = caesar(text, 10)
+        big_text = figlet.renderText(t)
+        live.update(Align.center(big_text, vertical="middle"))
+
+    DesmosDecoder(start_minecraft, callback).decode()

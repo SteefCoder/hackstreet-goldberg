@@ -4,8 +4,9 @@ from .commons import *
 
 
 class DesmosDecoder:
-    def __init__(self, callback):
+    def __init__(self, callback, progress_callback=None):
         self.callback = callback
+        self.progress_callback = progress_callback
         self.CHUNK = 4096       # samples per frame
         self.RATE = 44100       # sample self.RATE (Hz)
 
@@ -31,7 +32,7 @@ class DesmosDecoder:
 
         return peak_freq, amplitude
     
-    def decode(self, callback):
+    def decode(self):
         p = pyaudio.PyAudio()
         stream = p.open(
             format=pyaudio.paInt16,
@@ -45,6 +46,7 @@ class DesmosDecoder:
         reset_char = True
         started = False
         freqs = {}
+        last_detected = None
 
         try:
             while True:
@@ -65,7 +67,7 @@ class DesmosDecoder:
                                 last_detected = char
                                 count = 1
 
-                            if count < 5:
+                            if count < 4:
                                 continue
                                 
                             if char == "@":
@@ -82,12 +84,14 @@ class DesmosDecoder:
                                 if char != "@":
                                     char_stream += char
                                     reset_char = False
+                                    if self.progress_callback:
+                                        self.progress_callback(char_stream)
 
                             break
-                    if not started:
-                        print("Waiting...")
-                    else:
-                        print(char_stream, freq)
+                    #if not started:
+                    #    # print("Waiting...")
+                    #else:
+                    #    print(char_stream, freq)
                 else:
                     print(f"🔇 silence", end="\n", flush=True)
                 
