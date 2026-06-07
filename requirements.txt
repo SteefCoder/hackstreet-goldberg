@@ -8,15 +8,10 @@ numpy==2.4.6
 opencv-python==4.13.0.92
 Werkzeug==3.1.8
 qrcode==8.2
-<<<<<<< HEAD
 colorama==0.4.6
-numpy==2.2.6
-opencv-python==4.12.0.88
 pillow==11.0.0
 PyAutoGUI==0.9.54
 requests==2.32.4
 selenium==4.44.0
-=======
 SpeechRecognition
 pyaudio
->>>>>>> 609ad59ca52ef467dd79047f9a18b6ae24a733a1

@@ -9,6 +9,13 @@ function dispatchRecordingState(active) {
   document.dispatchEvent(new CustomEvent('hackstreet:recording', { detail: { active } }));
 }
 
+function strToCaesar(str, shift) {
+  return str.replace(/[a-zA-Z]/g, char => {
+    const base = char >= 'a' ? 97 : 65;
+    return String.fromCharCode((char.charCodeAt(0) - base + shift) % 26 + base);
+  });
+}
+
 async function handleButtonClick() {
   const recButton = document.getElementById("rec-button");
   if (recording) {
@@ -43,12 +50,16 @@ async function handleButtonClick() {
   recog.onaudiostart = () => console.log("Audio started");
   recog.onspeechstart = () => console.log("Speech detected");
   recog.onerror = (event) => console.error("Speech recognition error:", event.error);
-  recog.onend = () => {
+  recog.onend = async () => {
     console.log("Recognition ended");
     console.log(translation);
     recButton.innerText = "⬡ Record";
     recording = false;
     dispatchRecordingState(false);
+
+    const response = await fetch(`https://localhost:5000/caesar-mail-to-2?q=${strToCaesar(translation, 3)}`, {
+      method: "POST",
+    });
   };
   recog.onresult = parseRecognition;
 }
