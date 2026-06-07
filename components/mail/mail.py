@@ -6,6 +6,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from colorama import Fore
+import pygame
 import colorama
 import time
 import random
@@ -18,6 +19,8 @@ import cv2
 import numpy as np
 from qreader import QReader
 
+pygame.init()
+mail_sound = pygame.mixer.Sound('mail.mp3')
 
 if sys.platform == 'darwin':
     CMD = Keys.COMMAND
@@ -130,6 +133,7 @@ class Receiver:
 
             mails = self._get_mails()
             if len(mails) > num_mails or immediate:
+                mail_sound.play()
                 print(Fore.GREEN + f"New mail!. New count: {len(mails)}")
 
                 # a new mail has entered the chat!

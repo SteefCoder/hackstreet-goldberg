@@ -17,7 +17,6 @@ from rich.align import Align
 
 
 def start_minecraft(msg):
-def start_minecraft(msg):
     def generate_qr(text):
         qr = qrcode.QRCode(border=0)
         qr.add_data(text)

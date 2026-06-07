@@ -16,3 +16,4 @@ selenium==4.44.0
 SpeechRecognition
 pyaudio
 flask-cors
+pygame-ce
