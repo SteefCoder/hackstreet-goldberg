@@ -93,7 +93,7 @@ class Sender:
         ActionChains(self.browser.driver).key_down(Keys.COMMAND).send_keys(Keys.RETURN).key_up(Keys.COMMAND).perform()
 
         # proprietary sleep
-        time.sleep(20)
+        time.sleep(3)
 
 
 class Receiver:
@@ -158,4 +158,4 @@ class Receiver:
         
             print(Fore.BLUE + f"No new mails. Current count: {num_mails}")
 
-        time.sleep(10000)
+        time.sleep(3)

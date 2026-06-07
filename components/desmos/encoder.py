@@ -11,7 +11,7 @@ from .commons import *
 class DesmosEncoder:
     def __init__(self, browser, msg):
         self.driver = browser.driver
-        self.msg = "asd"
+        self.msg = msg
         self.frequences = []
     
     def encode(self):

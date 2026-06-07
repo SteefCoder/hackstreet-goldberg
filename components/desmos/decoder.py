@@ -1,6 +1,6 @@
 import pyaudio
 import numpy as np
-from commons import *
+from .commons import *
 
 
 class DesmosDecoder:
