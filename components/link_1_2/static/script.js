@@ -25,6 +25,7 @@ async function handleButtonClick() {
     dispatchRecordingState(false);
     return;
   }
+
   if (!translator) {
     recButton.innerText = "Downloading model...";
     recButton.disabled = true;
@@ -41,6 +42,7 @@ async function handleButtonClick() {
       return;
     }
   }
+
   recButton.disabled = false;
   recButton.innerText = "◼ Stop";
   recording = true;
@@ -56,8 +58,7 @@ async function handleButtonClick() {
     recButton.innerText = "⬡ Record";
     recording = false;
     dispatchRecordingState(false);
-
-    const response = await fetch(`https://localhost:5000/caesar-mail-to-2?q=${strToCaesar(translation, 3)}`, {
+    const response = await fetch(`http://localhost:8080/caesar-mail-to-2?q=${strToCaesar(translation, 3)}`, {
       method: "POST",
     });
   };
