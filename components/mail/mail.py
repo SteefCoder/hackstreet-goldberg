@@ -142,7 +142,7 @@ class Receiver:
                     cv2_img = cv2.cvtColor(np.array(pil_img), cv2.COLOR_RGB2BGR)
                     detector = cv2.QRCodeDetector()
                     text, points, _ = detector.detectAndDecode(cv2_img)
-                    print("QR content:", text)
+                    callback(text)
                 else:
                     # receiving text, so find the correct "div"
                     divs = self.browser.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div[dir='ltr']")))
