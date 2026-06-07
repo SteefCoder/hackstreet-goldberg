@@ -84,12 +84,13 @@ try:
             if not started:
                 print("Waiting...")
             else:
-                print(char_stream)
+                print(char_stream, freq)
         else:
             print(f"🔇 silence", end="\n", flush=True)
         
         if break_outer:
             print("broken outer")
+            print(f"final message: {char_stream}")
             break
 
 except KeyboardInterrupt:
