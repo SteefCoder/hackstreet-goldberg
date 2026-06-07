@@ -45,8 +45,8 @@ class DesmosDecoder:
         char_stream = ""
         reset_char = True
         started = False
-        count = 0
-        last_detected = ""
+        freqs = {}
+        last_detected = None
 
         try:
             while True:
@@ -79,6 +79,7 @@ class DesmosDecoder:
 
                             if char == "|":
                                 reset_char = True
+                                
                             elif reset_char and started:
                                 if char != "@":
                                     char_stream += char

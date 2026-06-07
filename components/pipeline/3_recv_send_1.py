@@ -17,6 +17,7 @@ from rich.align import Align
 
 
 def start_minecraft(msg):
+def start_minecraft(msg):
     def generate_qr(text):
         qr = qrcode.QRCode(border=0)
         qr.add_data(text)
@@ -27,6 +28,7 @@ def start_minecraft(msg):
         with open("components/mcserver/world/scripts/shared/qr.json", "w") as f:
             json.dump(matrix, f)
 
+    generate_qr(msg)
 
     generate_qr(msg)
     # generate_qr("abc")

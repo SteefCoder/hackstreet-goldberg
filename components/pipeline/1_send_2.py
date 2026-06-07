@@ -16,7 +16,8 @@ CORS(app)
 
 
 def show_hello_world(msg):
-    webbrowser.open(f"http://localhost:8080/final?text={msg}")
+    print(msg)
+    webbrowser.open(f"localhost:8080/final?text={msg}")
 
 
 def wait_for_qr_to_arrive():
@@ -42,7 +43,7 @@ def caesarMailTo2():
     print(encoded)
 
     with Browser() as gmail:
-        sender = Sender(gmail, typing_delay=0.2)
+        sender = Sender(gmail, typing_delay=0.0)
         sender.send(recv="lianbitterbal@gmail.com", msg=encoded)
 
     Thread(target=wait_for_qr_to_arrive).start()

@@ -16,6 +16,7 @@ import pyautogui as pag
 from PIL import ImageGrab
 import cv2
 import numpy as np
+from qreader import QReader
 
 
 if sys.platform == 'darwin':
@@ -142,19 +143,19 @@ class Receiver:
                     # right click + save the image
                     ActionChains(self.browser.driver).context_click(attach).perform()
                     time.sleep(2)
-                    pag.press("v")
+                    for _ in range(3):
+                        pag.press("down")
+                        time.sleep(0.2)
+                    pag.press("enter")
                     time.sleep(2)
-                    pag.press("enter")
-                    time.sleep(1)
-                    pag.press("enter")
-                    time.sleep(1)
-                    pag.press("enter")
 
                     pil_img = ImageGrab.grabclipboard()
-                    cv2_img = cv2.cvtColor(np.array(pil_img), cv2.COLOR_RGB2BGR)
-                    detector = cv2.QRCodeDetector()
-                    text, points, _ = detector.detectAndDecode(cv2_img)
-                    callback(text)
+                    image_path = "pil_img.png"
+                    pil_img.save("pil_img.png")
+                    qreader = QReader()
+                    image = cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)
+                    decoded_texts = qreader.detect_and_decode(image=image)
+                    callback(decoded_texts[0])
                 else:
                     # receiving text, so find the correct "div"
                     divs = self.browser.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div[dir='ltr']")))
