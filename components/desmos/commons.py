@@ -5,8 +5,8 @@ chars = [
 ]
 char_to_freq_range = {}
 char_to_freq = {}
-min_freq = 150
-max_freq = 1700
+min_freq = 200
+max_freq = 1750
 freq_room = (max_freq - min_freq) / len(chars)
 for i, char in enumerate(chars):
     min_range = min_freq + i * freq_room

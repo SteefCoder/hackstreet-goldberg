@@ -78,18 +78,19 @@ try:
                     elif reset_char and started:
                         if char != "@":
                             char_stream += char
-                        reset_char = False
+                            reset_char = False
 
                     break
             if not started:
                 print("Waiting...")
             else:
-                print(char_stream)
+                print(char_stream, freq)
         else:
             print(f"🔇 silence", end="\n", flush=True)
         
         if break_outer:
             print("broken outer")
+            print(f"final message: {char_stream}")
             break
 
 except KeyboardInterrupt:
