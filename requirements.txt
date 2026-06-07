@@ -13,3 +13,6 @@ pillow==11.0.0
 PyAutoGUI==0.9.54
 requests==2.32.4
 selenium==4.44.0
+SpeechRecognition
+pyaudio
+flask-cors
