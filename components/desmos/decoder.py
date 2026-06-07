@@ -43,8 +43,7 @@ class DesmosDecoder:
         char_stream = ""
         reset_char = True
         started = False
-        count = 0
-        last_detected = ""
+        freqs = {}
 
         try:
             while True:
@@ -55,7 +54,7 @@ class DesmosDecoder:
                 break_outer = False
 
                 # Only print if loud enough (not silence)
-                if amplitude > 5000:
+                if amplitude > 500_000:
                     # convert frequency to the fucking chars
                     for char, range in char_to_freq_range.items():
                         if range[0] <= freq <= range[1]:
@@ -77,6 +76,7 @@ class DesmosDecoder:
 
                             if char == "|":
                                 reset_char = True
+                                
                             elif reset_char and started:
                                 if char != "@":
                                     char_stream += char
