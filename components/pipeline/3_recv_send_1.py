@@ -92,10 +92,10 @@ console = Console()
 figlet = Figlet(font="big")
 
 with Live(refresh_per_second=10, screen=True) as live:
-
     def callback(text):
         t = caesar(text, 10)
         big_text = figlet.renderText(t)
         live.update(Align.center(big_text, vertical="middle"))
 
+    live.update(Align.center("waiting...", vertical="middle"))
     DesmosDecoder(start_minecraft, callback).decode()
