@@ -78,7 +78,7 @@ try:
                     elif reset_char and started:
                         if char != "@":
                             char_stream += char
-                        reset_char = False
+                            reset_char = False
 
                     break
             if not started:

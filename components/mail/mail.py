@@ -119,6 +119,8 @@ class Receiver:
 
             mails = self._get_mails()
             if len(mails) > num_mails or immediate:
+                print(Fore.GREEN + f"New mail!. New count: {len(mails)}")
+
                 # a new mail has entered the chat!
                 last_mail = mails[0]
                 mail_link = last_mail.find_element(By.CSS_SELECTOR, 'div[role="link"]')
@@ -147,6 +149,7 @@ class Receiver:
                     # receiving text, so find the correct "div"
                     divs = self.browser.wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div[dir='ltr']")))
                     for i, div in enumerate(divs):
+                        print(div.text)
                         # find the one that actually has text
                         if stripped := div.text.strip():
                             callback(stripped)
