@@ -77,7 +77,7 @@ class DesmosDecoder:
 
                             if char == "|":
                                 reset_char = True
-                                
+
                             elif reset_char and started:
                                 if char != "@":
                                     char_stream += char
