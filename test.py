@@ -1,8 +1,7 @@
 from PIL import ImageGrab, Image
 import cv2
 import numpy as np
-from qreader import QReader
-
+# from qreader import QReader
 
 
 def detect():

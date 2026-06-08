@@ -17,7 +17,7 @@ import pyautogui as pag
 from PIL import ImageGrab
 import cv2
 import numpy as np
-from qreader import QReader
+# from qreader import QReader
 
 pygame.init()
 mail_sound = pygame.mixer.Sound('mail.mp3')

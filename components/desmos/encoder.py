@@ -76,7 +76,7 @@ class DesmosEncoder:
         zoom_out = WebDriverWait(self.driver,10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "button[aria-label='Zoom Out']"))
         )
-        for _ in range(7):
+        for _ in range(4):
             zoom_out.click()
             time.sleep(0.1)
 
